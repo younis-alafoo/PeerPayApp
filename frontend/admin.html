@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="../static/styles.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 500px;
+      margin: 60px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h2, h3 {
+      text-align: center;
+      color: #333;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+    input {
+      padding: 10px;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    #loginMessage {
+      margin-top: 10px;
+      text-align: center;
+      font-weight: bold;
+      color: #d9534f;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 15px;
+    }
+    li {
+      background: #f9f9f9;
+      margin-bottom: 8px;
+      padding: 10px;
+      border-left: 4px solid #007bff;
+      font-size: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2 id="title">🔐 Admin Login</h2>
+
+    <!-- 🔐 Login Section -->
+    <div id="loginSection">
+      <form id="loginForm">
+        <input type="text" name="username" placeholder="Username" required />
+        <input type="password" name="password" placeholder="Password" required />
+        <button type="submit">Login</button>
+      </form>
+      <p id="loginMessage"></p>
+    </div>
+
+    <!-- 🧾 Transaction Viewer -->
+    <div id="adminSection" style="display:none;">
+      <h3>📋 View User Transactions</h3>
+      <form id="adminForm">
+        <input type="text" name="user_id" inputmode="numeric" pattern="[0-9]*" placeholder="User ID" required />
+        <button type="submit">View Transactions</button>
+      </form>
+      <ul id="adminHistoryList"></ul>
+      <button onclick="logout()">Logout</button>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const payload = Object.fromEntries(formData.entries());
+
+      const res = await fetch("/users/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.token) {
+        localStorage.setItem("admin_token", data.token);
+        showAdminDashboard();
+      } else {
+        document.getElementById("loginMessage").textContent = data.detail || "Login failed.";
+      }
+    });
+
+    function showAdminDashboard() {
+      document.getElementById("title").textContent = "🛡️ Admin Dashboard";
+      document.getElementById("loginSection").style.display = "none";
+      document.getElementById("adminSection").style.display = "block";
+    }
+
+    document.getElementById("adminForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const userId = new FormData(e.target).get("user_id");
+      const token = localStorage.getItem("admin_token");
+
+      const res = await fetch(`/transactions/transaction/${userId}`, {
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+
+      const data = await res.json();
+      const list = document.getElementById("adminHistoryList");
+      list.innerHTML = "";
+
+      if (res.ok && Array.isArray(data)) {
+        if (data.length === 0) {
+          list.innerHTML = "<li>No transactions found for this user.</li>";
+        } else {
+          data.forEach(tx => {
+            const item = document.createElement("li");
+            item.textContent = `🧾 ${tx.created_at} | ${tx.original_amount} ${tx.currency} → ${tx.recipient_acc_id} (${tx.status})`;
+            list.appendChild(item);
+          });
+        }
+      } else {
+        list.innerHTML = `<li>${data.detail || "Access denied or failed to fetch transactions."}</li>`;
+      }
+    });
+
+    function logout() {
+      localStorage.removeItem("admin_token");
+      location.reload();
+    }
+  </script>
+</body>
+</html>

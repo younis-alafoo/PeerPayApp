@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Register</title>
+  <link rel="stylesheet" href="../static/styles.css" />
+  <style>
+    .register-container {
+      max-width: 500px;
+      margin: 60px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .register-container h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 24px;
+      color: #333;
+    }
+    .register-container label {
+      font-weight: bold;
+      margin-top: 15px;
+      display: block;
+    }
+    .register-container input,
+    .register-container select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .register-container button {
+      width: 100%;
+      font-size: 16px;
+      margin-top: 20px;
+      padding: 10px;
+      background: #28a745;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .register-container button:hover {
+      background: #218838;
+    }
+    #responseMessage {
+      margin-top: 15px;
+      text-align: center;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="register-container">
+    <h2>📝 Register</h2>
+
+    <form id="registerForm">
+      <label for="full_name">Full Name</label>
+      <input type="text" id="full_name" name="full_name" required />
+
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" required />
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required />
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required />
+
+      <label for="currency">Currency</label>
+      <select id="currency" name="currency" required>
+        <option value="">Select currency</option>
+        <option value="USD">USD</option>
+        <option value="EUR">EUR</option>
+        <option value="GBP">GBP</option>
+      </select>
+
+      <button type="submit">Register</button>
+    </form>
+
+    <p id="responseMessage"></p>
+  </div>
+
+  <script>
+    document.getElementById("registerForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const full_name = document.getElementById("full_name").value;
+      const username = document.getElementById("username").value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const currency = document.getElementById("currency").value;
+
+      const response = await fetch("/users/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ full_name, username, email, password, currency })
+      });
+
+      const result = await response.json();
+      const message = document.getElementById("responseMessage");
+
+      if (response.ok) {
+        message.style.color = "#28a745";
+        message.textContent = "Registration successful!";
+      } else {
+        message.style.color = "#d9534f";
+        message.textContent = result.detail || "Registration failed.";
+      }
+    });
+  </script>
+</body>
+</html>
