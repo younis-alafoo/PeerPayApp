@@ -89,7 +89,9 @@ def send_transaction(payload: SendRequest, db: Session = Depends(get_db),current
             raise HTTPException(status_code=404, detail="Exchange rate not found.")
         rate_value = rate.rate
 
-    converted_amount = payload.amount * rate_value
+    #converted_amount = payload.amount * rate_value
+    converted_amount = round(payload.amount * rate_value, 2)
+
 
         # Update balances
     sender_account.balance -= payload.amount

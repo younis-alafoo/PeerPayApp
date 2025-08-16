@@ -63,7 +63,8 @@
       <label for="password">Password</label>
       <input type="password" id="password" name="password" required />
 
-      <button type="submit">Login</button>
+      <button type="submit" id="loginButton">Login</button>
+
     </form>
 
     <p id="responseMessage"></p>
@@ -91,7 +92,7 @@
       if (response.ok) {
         message.style.color = "#28a745";
         message.textContent = result.message;
-        // Optionally store token: localStorage.setItem("token", result.token);
+      
       } else {
         message.style.color = "#d9534f";
         message.textContent = result.detail?.[0]?.msg || "Login failed.";

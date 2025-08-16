@@ -6,6 +6,7 @@ from data.user_data import user_list
 from data.exchange_rate_data import exchange_rates
 from config.environment import db_URI
 from sqlalchemy import create_engine
+from sqlalchemy import text
 
 engine = create_engine(db_URI)
 SessionLocal = sessionmaker(bind=engine)
@@ -33,6 +34,10 @@ try:
 
     # Seed exchange_rates
     db.add_all(exchange_rates)
+    db.commit()
+
+    db.execute(text("ALTER SEQUENCE users_user_id_seq RESTART WITH 7"))  # There are 6 records in users table to avoid user_id duplication
+    db.execute(text("ALTER SEQUENCE accounts_account_id_seq RESTART WITH 6")) #There are 5 records in accounts table to avoid account_id duplication
     db.commit()
 
     db.close()
