@@ -19,8 +19,8 @@ transactions_list = [
         sender_user=user_list[2],
         recipient_user=user_list[3],
         original_amount=7,
-        converted_amount=7,
-        currency="USD",
+        converted_amount=5.95,
+        currency="EUR",
         status="Success"
     ),
     TransactionModel(
