@@ -55,18 +55,42 @@ Route Documentation:
 
 ## 🚀 Getting Started
 
--Clone the Repository: "https://git.generalassemb.ly/yunis/PeerPay-Project.git"
--Create & Activate a Virtual Environment, Install Dependencies:
- pip install fastapi uvicorn sqlalchemy psycopg2-binary pydantic passlib pyjwt
- pip install pytest starlette httpx
--Run the Application: "uvicorn main:app --reload"
+### 1. Clone the Repository
+https://github.com/younis-alafoo/PeerPayApp.git
+
+### 2. Set Up the Environment
+Create & Activate a Virtual Environment
+ python -m venv venv
+ venv\Scripts\activate
+
+### 3. Install dependencies:
+pip install fastapi uvicorn sqlalchemy psycopg2-binary pydantic passlib pyjwt pytest starlette httpx selenium
+
+
+### 4. Configure the Database:
+Update config/environment.py with your PostgreSQL connection string:
+Run the seeding script to initialize test data (python seed.py)
+
+
+### 5. Start the Backend Server:
+uvicorn main:app --reload
+
+### 6. Running Tests:
+unit test: pytest tests/test_unit.py
+integration test: pytest tests/test_integration.py
+E2E test: pytest tests/test_e2e.py
+
+### 7. URL's
 Access the API at: http://localhost:8000
 Interactive docs: http://localhost:8000/docs
+Login Page: http://localhost:8000/static/frontend/login.html
+Register Page: http://localhost:8000/static/frontend/register.html
+Account Page: http://localhost:8000/static/frontend/account.html
+Transactions Page: http://localhost:8000/static/frontend/transactions.html
+Admin Page: http://localhost:8000/static/frontend/admin.html
 
 --- 
 
-Technologies used: FastAPI, SQLAlchemy, PostgreSQL, and PyTest.
+## 🛠️ Technologies and Libraries Used: 
 
-
-
-
+FastAPI, unicorn, SQLAlchemy, PostgreSQL, pytest, httpx, selenium, HTML/CSS, JavaScript, pyjwt, pydantic, uuid, Starlette, passlib, bcrypt, psycopg2-binary
