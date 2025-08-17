@@ -60,34 +60,34 @@ https://github.com/younis-alafoo/PeerPayApp.git
 
 ### 2. Set Up the Environment
 Create & Activate a Virtual Environment
- python -m venv venv
- venv\Scripts\activate
+- python -m venv venv
+- venv\Scripts\activate
 
 ### 3. Install dependencies:
 pip install fastapi uvicorn sqlalchemy psycopg2-binary pydantic passlib pyjwt pytest starlette httpx selenium
 
 
 ### 4. Configure the Database:
-Update config/environment.py with your PostgreSQL connection string:
-Run the seeding script to initialize test data (python seed.py)
+- Update config/environment.py with your PostgreSQL connection string:
+- Run the seeding script to initialize test data (python seed.py)
 
 
 ### 5. Start the Backend Server:
 uvicorn main:app --reload
 
 ### 6. Running Tests:
-unit test: pytest tests/test_unit.py
-integration test: pytest tests/test_integration.py
-E2E test: pytest tests/test_e2e.py
+- unit test: pytest tests/test_unit.py
+- integration test: pytest tests/test_integration.py
+- E2E test: pytest tests/test_e2e.py
 
-### 7. URL's
-Access the API at: http://localhost:8000
-Interactive docs: http://localhost:8000/docs
-Login Page: http://localhost:8000/static/frontend/login.html
-Register Page: http://localhost:8000/static/frontend/register.html
-Account Page: http://localhost:8000/static/frontend/account.html
-Transactions Page: http://localhost:8000/static/frontend/transactions.html
-Admin Page: http://localhost:8000/static/frontend/admin.html
+### 7. Access the App's URL's
+- Access the API at: http://localhost:8000
+- Interactive docs: http://localhost:8000/docs
+- Login Page: http://localhost:8000/static/frontend/login.html
+- Register Page: http://localhost:8000/static/frontend/register.html
+- Account Page: http://localhost:8000/static/frontend/account.html
+- Transactions Page: http://localhost:8000/static/frontend/transactions.html
+- Admin Page: http://localhost:8000/static/frontend/admin.html
 
 --- 
 
