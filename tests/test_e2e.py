@@ -120,14 +120,47 @@ def test_transaction_page():
 
         # Wait for success message
         WebDriverWait(driver, 10).until(
-            lambda d: "✅ Sent" in d.find_element(By.ID, "sendMessage").text
+            lambda d: "✅ Sent 10." in d.find_element(By.ID, "sendMessage").text
         )
 
         # Check transaction history
         history_items = driver.find_elements(By.CSS_SELECTOR, "#historyList li")
-        assert any("💸 10" in item.text for item in history_items)
+        assert any("💸 10 USD" in item.text for item in history_items)
 
         print("Transaction test passed.")
+
+    finally:
+        driver.quit()
+
+def test_admin_dashboard():
+    driver = webdriver.Chrome()
+    try:
+        driver.get("http://localhost:8000/static/frontend/admin.html")
+
+        # Login as admin
+        driver.find_element(By.NAME, "username").send_keys("Yunis")
+        driver.find_element(By.NAME, "password").send_keys("securepassword1")
+        driver.find_element(By.ID, "loginButton").click()
+
+        # Wait for admin section to appear
+        WebDriverWait(driver, 10).until(
+            EC.visibility_of_element_located((By.ID, "adminSection"))
+        )
+
+        # Submit user ID to view transactions
+        driver.find_element(By.NAME, "user_id").send_keys("1")
+        driver.find_element(By.ID, "viewButton").click()
+
+        # Wait for transaction list to populate
+        WebDriverWait(driver, 10).until(
+            lambda d: len(d.find_elements(By.CSS_SELECTOR, "#adminHistoryList li")) > 0
+        )
+
+        # Check that at least one transaction is there
+        items = driver.find_elements(By.CSS_SELECTOR, "#adminHistoryList li")
+        assert any("🧾" in item.text for item in items)
+
+        print("Admin dashboard test passed.")
 
     finally:
         driver.quit()
